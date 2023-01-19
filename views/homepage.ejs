@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        h3{text-align: center;}
+        h5{text-align: center;}
+        span{text-align: center;}
+        a{text-align: center;}
+        div{text-align: center;}
+        ol{text-align: center;}
+    </style>
+    <title><%= title %></title>
+</head>
+<body>
+    <%- include('heading.ejs') %>
+    <div class="my-6 mx-10 justify-center">
+        <h3 class="text-4xl my-4 font-semibold">Welcome <%= userName %></h3>
+        <h5 class="text-2xl">Elections <span class="bg-gray-100 ml-2 px-2 font-semibold"><%= noOfElections %></span></h5>
+            <div class="bg-black rounded w-fit px-2 py-1 hover:bg-black">
+                <a href="/electionpage/addelection" class="text-white">Create election</a>
+            </div>
+        <div style="text-align:center">
+            <div class="mx-4 justify-center" >
+                <p class="text-black"><%= (listOfElections.length==0)?"You don't have elections yet!":"" %></p>
+                    <% for (let i=0; i<listOfElections.length; i++) { %>
+                            <div class="flex items-center  my-2 px-2 py-1 justify-center  ">
+                                <a href="/electionpage/<%= listOfElections[i].id %>" class="m-2 text-lr text-black font-semibold " ><%=i+1%>. <%= listOfElections[i].electionName %></a>
+                            </div>
+                    <% } %>
+            </div>
+        </div>
+    </div>
+    
+
+</body>
+</html>
