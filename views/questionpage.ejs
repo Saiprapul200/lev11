@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<%= csrfToken %>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        var token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+        function deleteOption(optionId) {
+            let electionID = <%= id %>;
+            let questionID = <%= questionId %>;
+            fetch(`/electionpage/${electionID}/que/${questionID}/opt/${optionId}`, {
+                method: "delete",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify({
+                    "_csrf":token
+                })
+            }).then((res)=>{
+                if (res.ok) {
+                    window.location.reload();
+                }
+            }).catch((err)=> console.error(err))
+        }
+    </script>
+    <style>
+        h3{text-align: center;}
+        p{text-align:center;}
+    </style>
+    <link rel="stylesheet" href="./css/style.css">
+    <title><%= title %></title>
+</head>
+<body class="bg-gray-50">
+    <%- include('heading.ejs') %>
+    <span style="color:black">></span>
+        <a href="/electionpage" class="text-black">Home page</a>
+        <span style="color:black">></span>
+        <a href="/electionpage/<%= id %>" class="text-black">Election</a>
+        <span style="color:black">></span>
+        <a href="/electionpage/<%= id %>/que" class="text-black">Questions</a>
+    <div class="grid grid-cols-6">
+        <div class="col-start-2 col-span-4">
+            <div class="px-2 py-1">
+                <h3 class="text-2xl my-2"><%= title %></h3>
+                <p class="text-black text-md my-2"><%= description %></p>
+            </div>
+            <div class="ml-12">
+                <ol class="list-decimal">
+                    <div class="grid grid-cols-6">
+                        <div class="col-start-3 col-span-2">
+                    <% for(let i=0; i<options.length; i++) { %>
+                        <li class="option-item">
+                            <div class="flex justify-between items-center w-full my-2 px-2 py-1 rounded-lg ">
+                                <p class="ml-2 text-lg "><%= options[i].option %></p>
+                                <div class="flex gap-2 text-purple-800">
+                                <div class="rounded w-fit px-2 py-1 flex gap-2 cursor-pointer ">                                                                       
+                                    <a href="/electionpage/<%= id %>/que/<%= questionId %>/opt/<%= options[i].id %>/edit" class="text-sm text-black">Edit </a>
+                                </div>
+                                <div class="rounded w-fit px-2 py-1 flex gap-2 cursor-pointer ">                                  
+                                    <a onclick="deleteOption(<%= options[i].id %>)" class="text-sm text-black">Delete </a>
+                                </div>
+                                </div>
+                            </div>
+                        </li>
+                    <% } %>
+                </ol>
+            </div>
+            <form action="/electionpage/<%= id %>/que/<%= questionId %>" method="post">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                    <div class="grid grid-cols-6">
+                        <div class="col-start-3 col-span-2">
+                    <div class="flex-auto">
+                        <input type="text" name="option" placeholder="Enter option" class="border border-gray-300 text-gray-900 w-full rounded p-2 text-sm" required autofocus/>
+                    </div>
+                    <p class="text-black"><%= (options.length==0)?"No options added yet!":"" %></p>
+                    <br>
+                    <div class="flex-none">
+                        <button type="submit" class="bg-black text-white px-5 py-1.5 rounded mr-2 mb-2">Add option</button>
+                    </div>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</body>
+</html>
