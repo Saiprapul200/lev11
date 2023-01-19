@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="csrf-token" content="<%= csrfToken %>">
+    <style>
+        h3{text-align: center;}
+        h2{text-align: center;}
+        a{text-align: center;}
+        p{text-align: center;}
+        .blink {
+            animation: blinker 2s linear infinite;
+            font-family: sans-serif;
+        }
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+    <title><%= title %></title>
+</head>
+<body>
+    <%- include('heading.ejs') %>
+    <h1 style="color:black">></span>
+        <a href="/electionpage" class="text-black">Home page</a>
+    <div class="flex gap-1 mx-10 mt-6 ">
+        <div class="bg-black rounded w-fit px-2 py-1 hover:bg-black">
+            <a href="/<%= id %>/previewelection" class="text-white ">Preview Election</a>
+        </div>
+    </div>
+    <h3 class="text-4xl my-4 font-medium"><%= ele.electionName %></h3>
+    <% if(ele.launched) { %>
+        <h5 class="bg-green-200 my-3 list-none rounded px-4 py-2 "> <p class="blink">* Election is Live *</p> </h5>
+        <div class="flex gap-1 mx-10 mt-6 ">
+            <h5 class="">Voters can visit this URL to vote : <a href="/election/<%= publicurl %>/voter" style="color:blue">https://vineeth-voting-application.onrender.com/election/<%= publicurl %></a></h5>
+        </div>
+        <% } %>
+    <div class="my-6 mx-10 ">
+                <h2 class=" text-lg text-black flex gap-1"> Questions <span class="bg-gray-100 ml-2 px-2"><%= noOfQuestions %></span></h2>
+                <a href="/electionpage/<%= id %>/que" class="py-1 hover:text-green-600 text-black">-> Manage Questions</a>
+                <h2 class=" text-lg text-black flex gap-1"> Voters <span class="bg-gray-100 ml-2 px-2"><%= noOfVoters %></span></h2>
+                <a href="/electionpage/<%= id %>/voters" class="py-1 hover:text-green-600 text-black">-> Manage Voters</a>
+            </div>
+            <div class="flex gap-1 mx-10 mt-6 ">
+                <div class="bg-black rounded w-fit px-2 py-1 hover:bg-black">
+                    <a href="/<%= id %>/launch" class="text-white ">Launch Election</a>
+                </div>
+            </div> 
+            <% if(messages && messages.error && messages.error.length > 0)  { %>
+                <% for(var i=0; i<messages.error.length; i++) { %>
+                  <p class="bg-red-200 my-3 list-none rounded px-4 py-2"><%= messages.error[i] %></p>
+                <% } %>
+            <% } %>
+</body>
+</html>
